@@ -1,4 +1,4 @@
-# Forward Head Posture Alert - v1
+# Forward Head Posture Alert - v2
 
 ## Overview
 This project aims to detect a user's posture using a webcam and alert them if they have bad posture (forward head posture) that could lead to neck pain or other discomfort.  
