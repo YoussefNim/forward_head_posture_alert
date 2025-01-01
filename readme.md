@@ -30,4 +30,4 @@ The program captures webcam feed and continuously monitors the user's pose. It u
 To install the required dependencies, run:
 
 ```bash
-pip install mediapipe opencv-python threading winsound
+pip install mediapipe==0.10.14 opencv-python threading winsound
