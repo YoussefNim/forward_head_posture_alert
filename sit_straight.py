@@ -3,16 +3,9 @@ import mediapipe as mp
 import threading
 import winsound
 
-
-def play_sound_loop(file_path, stop_event):
+def play_sound_loop(stop_event):
     while not stop_event.is_set():
-        winsound.PlaySound(file_path, winsound.SND_FILENAME | winsound.SND_LOOP)
-        stop_event.wait(2)
-        print("Sound playing...")
-    print("Sound stopped")
-
-
-
+        winsound.Beep(1000, 1000)  # Single continuous 1000Hz beep, 1 second duration
 
 # Initialize Mediapipe Pose
 mp_pose = mp.solutions.pose
@@ -36,10 +29,8 @@ def estimate_ear_positions(face_rect, frame_width, frame_height):
 
 # Variables for sound control
 stop_event = threading.Event()
-sound_thread = threading.Thread(target=play_sound_loop, args=("beep one second.wav", stop_event))
-sound_thread.start()
-# sound_thread = None
-
+stop_event.set()  # Start with sound stopped
+sound_thread = None
 
 # Capture webcam feed
 cap = cv2.VideoCapture(0)
@@ -107,19 +98,16 @@ while cap.isOpened():
         if left_diff > threshold or right_diff > threshold:
             posture = f" bad : L {left_diff:.2f} and R {right_diff:.2f}"
             color = (0, 0, 255)  # Red
-            #if sound_thread is None:  # Start sound if not already playing
-            stop_event.clear()
-                # sound_thread = threading.Thread(target=play_sound_loop, args=("beep one second.wav", stop_event))
-                # sound_thread.start()
-            print("Sound started: Bad posture detected.")
-
+            if sound_thread is None or not sound_thread.is_alive():
+                stop_event.clear()
+                sound_thread = threading.Thread(target=play_sound_loop, args=(stop_event,))
+                sound_thread.daemon = True  # Make thread daemon so it exits when main program exits
+                sound_thread.start()
+                print("Sound started: Bad posture detected.")
         else:
             posture = f"good : L {left_diff:.2f} and R {right_diff:.2f}"
             color = (0, 255, 0)  # Green
-            #if sound_thread is not None:  # Stop sound if playing
             stop_event.set()
-                # sound_thread.join()
-                # sound_thread = None
             print("Sound stopped: Posture corrected.")
 
         # Display posture feedback
@@ -143,11 +131,9 @@ while cap.isOpened():
     #     break
 
 # Clean up
-if sound_thread is not None:
-    stop_event.set()
-    sound_thread.join(timeout=5)
-    sound_thread = None
-
+stop_event.set()
+if sound_thread is not None and sound_thread.is_alive():
+    sound_thread.join(timeout=2)
 cap.release()
 cv2.destroyAllWindows()
 
