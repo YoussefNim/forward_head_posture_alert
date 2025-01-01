@@ -18,7 +18,9 @@ The program captures webcam feed and continuously monitors the user's pose. It u
 - **Real-time Feedback**: Posture status (good or bad) is displayed on the screen, along with colored visual indicators.
 
 ## Limitations
-- **Sound Looping Issue**: The sound alert does not loop correctly in its current version. The sound plays once when bad posture is detected, but doesn't restart or loop until the posture changes.
+- **Sound Looping Issue**: 
+    - V1 : The sound alert does not loop correctly in its current version. The sound plays once when bad posture is detected, but doesn't restart or loop until the posture changes.
+    - V2 : replaced the audio file with a continuous beep that loops until the posture is corrected.
 - **Accuracy of Ear Estimation**: If the Mediapipe pose detection fails to detect ears, the program falls back to using the Haar Cascade face detection, which may not always give accurate ear positions, especially for side profiles.
 
 ## Requirements
