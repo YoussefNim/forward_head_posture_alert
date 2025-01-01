@@ -1,7 +1,8 @@
 # Forward Head Posture Alert - v1
 
 ## Overview
-This project aims to detect a user's posture using a webcam and alert them if they have bad posture (forward head posture). The application uses :
+This project aims to detect a user's posture using a webcam and alert them if they have bad posture (forward head posture) that could lead to neck pain or other discomfort.  
+The application uses :
 - **Mediapipe** for pose detection.
 - **OpenCV** for face detection and visualizations.
 - **winsound** and **threading** to play a sound (in a loop).
@@ -30,4 +31,4 @@ The program captures webcam feed and continuously monitors the user's pose. It u
 To install the required dependencies, run:
 
 ```bash
-pip install mediapipe==0.10.14 opencv-python threading winsound
+pip install mediapipe==0.10.14 opencv-python
