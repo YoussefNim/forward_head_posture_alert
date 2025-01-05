@@ -1,5 +1,7 @@
 # Forward Head Posture Alert - V3
 
+![posture monitor icon](attachment:posture_monitor_icon.ico)
+
 ## V3
 ### Added :
 - Tkinter interface to adjust the sensitivity and duration of slouching after which you'll be notified
@@ -44,3 +46,4 @@ To install the required dependencies, run:
 
 ```bash
 pip install mediapipe==0.10.14 opencv-python tkinter
+
