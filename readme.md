@@ -8,7 +8,7 @@
 ## V3
 ### Added :
 - Tkinter interface to adjust the sensitivity and duration of slouching after which you'll be notified
-- Settings.json file to store user preferences
+- posture_settings.json file to store user preferences
 - Taskbar icon
 
 ## Overview
