@@ -1,6 +1,6 @@
 # Forward Head Posture Alert - V3
 
-![posture monitor icon](attachment:posture_monitor_icon.ico)
+![posture monitor icon](attachment:posture_monitor_icon.png)
 
 ## V3
 ### Added :
