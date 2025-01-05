@@ -1,4 +1,10 @@
-# Forward Head Posture Alert - v2
+# Forward Head Posture Alert - V3
+
+## V3
+### Added :
+- Tkinter interface to adjust the sensitivity and duration of slouching after which you'll be notified
+- Settings.json file to store variables
+- Taskbar icon
 
 ## Overview
 This project aims to detect a user's posture using a webcam and alert them if they have bad posture (forward head posture) that could lead to neck pain or other discomfort.  
@@ -16,6 +22,9 @@ The program captures webcam feed and continuously monitors the user's pose. It u
 - **Face Detection**: **Haar Cascade classifiers** are used to detect faces (frontal and profile) to estimate ear positions when the pose landmarks are not detected.
 - **Alert System**: An alert sound is played when the user has bad posture, and the sound stops when good posture is detected.
 - **Real-time Feedback**: Posture status (good or bad) is displayed on the screen, along with colored visual indicators.
+- **Customizable Sensitivity**: Users can adjust the sensitivity threshold and slouching duration through a Tkinter interface.
+- **Settings Persistence**: Sensitivity threshold and slouching duration are saved in a `posture_settings.json` file and persist across sessions.
+- **Taskbar Icon**: The application now has a custom taskbar icon for a more professional look.
 
 ## Limitations
 - **Sound Looping Issue**: 
@@ -28,9 +37,10 @@ The program captures webcam feed and continuously monitors the user's pose. It u
 - `mediapipe` library for pose detection
 - `opencv-python` library for computer vision tasks
 - `threading` and `winsound` libraries for sound control
+- `tkinter` for GUI interface
 
 ### Install the required dependencies
 To install the required dependencies, run:
 
 ```bash
-pip install mediapipe==0.10.14 opencv-python
+pip install mediapipe==0.10.14 opencv-python tkinter
