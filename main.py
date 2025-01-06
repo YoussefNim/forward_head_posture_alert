@@ -1,14 +1,15 @@
 import cv2
 from mediapipe.python.solutions import pose as mp_pose
 import threading
-import winsound
+from winsound import Beep
 from json import load, dump
 import tkinter as tk
 import ctypes
 from time import time as current_time
+from psutil import cpu_percent
 
 default_threshold = 0.35
-default_slouching_duration = 5 
+default_slouching_duration = 5
 slouching_start = None
 
 # Load the threshold from the settings file
@@ -23,7 +24,7 @@ except FileNotFoundError:
 
 def play_sound_loop(stop_event):
     while not stop_event.is_set():
-        winsound.Beep(1000, 1000)  # Single continuous 1000Hz beep, 1 second duration
+        Beep(1000, 1000)  # Single continuous 1000Hz beep, 1 second duration
 
 def start_monitoring():
     global threshold
@@ -53,8 +54,8 @@ def start_monitoring():
     # Capture webcam feed
     cap = cv2.VideoCapture(0)
 
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # Reduce frame width for faster processing
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)  # Reduce frame height for faster processing
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)  # Reduce frame width for faster processing
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)  # Reduce frame height for faster processing
     cap.set(cv2.CAP_PROP_FPS, 15)  # Lower frame rate to 15 FPS
 
     frame_skip = 1  # Skip frames to reduce CPU usage
@@ -132,7 +133,9 @@ def start_monitoring():
 
 
             # Display posture feedback
-            cv2.putText(frame, posture, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2, cv2.LINE_AA)
+            cv2.putText(frame, posture, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2, cv2.LINE_AA)
+            cpu_usage = cpu_percent()
+            cv2.putText(frame, str(cpu_usage), (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2, cv2.LINE_AA)
 
         # Show the frame
         cv2.imshow('Posture Detection', frame)
@@ -148,9 +151,6 @@ def start_monitoring():
     cap.release()
     cv2.destroyAllWindows()
 
-
-
-
 posture_monitor_interface = tk.Tk()
 posture_monitor_interface.title("POSTURE MONITOR SETTINGS")
 posture_monitor_interface.geometry("350x220")
@@ -159,7 +159,6 @@ posture_monitor_interface.geometry("350x220")
 myappid = 'tkinter.python.test'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 posture_monitor_interface.iconbitmap("posture_monitor_icon.ico")
-
 
 # the tkinter interface isn't automatically the main active window, so force focus on it
 posture_monitor_interface.focus_force()
@@ -177,10 +176,9 @@ threshold_text = tk.Label(master= posture_monitor_interface, font= label_font,
                         text = "Adjust sensitivity threshold \n (Lower = more sensitive, Higher = less sensitive)")
 threshold_text.pack()
 
-# Use a StringVar to hold the current threshold value
-threshold_var = tk.StringVar(value=f"{threshold}")  # Set the initial value to the loaded threshold
-slouching_duration_var = tk.StringVar(value=f"{slouching_duration}")  # Set the initial value to the loaded slouching duration
-print(threshold_var)
+# Use a TkVar to hold the user's preferred values  
+threshold_var = tk.DoubleVar(value=f"{threshold}")  # Set the initial value to the loaded threshold
+slouching_duration_var = tk.IntVar(value=f"{slouching_duration}")  # Set the initial value to the loaded slouching duration
 
 def update_settings():
     threshold = float(threshold_var.get())
@@ -197,7 +195,7 @@ def update_settings():
 # Function to close Tkinter interface and start main process
 def close_and_launch():
         update_settings()  # Save the updated threshold
-        posture_monitor_interface.destroy()  # Close Tkinter window
+        posture_monitor_interface.destroy()  # Hide Tkinter window 
         start_monitoring()  # Start the main posture analysis process
 
 # the spinbox will update the value of threshold_var variable, not the threshold variable
@@ -236,7 +234,7 @@ spinbox_slouching_duration.pack(pady=5)
 validate_threshold_button = tk.Button(master=posture_monitor_interface, font=button_font,
                                     bg='#4CAF50', fg='white', activebackground='#388E3C', activeforeground='white',
                                     relief="raised",
-                                    text="Start Posture Monitoring", command= close_and_launch)
+                                    text="Save and Start Posture Monitoring", command= close_and_launch)
 validate_threshold_button.pack()
 
 # associate some action/shortcut/keyboard clicks with a function

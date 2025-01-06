@@ -6,13 +6,20 @@
 
 
 ## V3
-### Added :
 - Tkinter interface to adjust the sensitivity and duration of slouching after which you'll be notified
 - posture_settings.json file to store user preferences
 - Taskbar icon
+- Changes to reduce computations :
+  - skip every N frames.
+  - reduced sound duration.
+  - lower resolution for video feed. 
+  - pause detection process if no user is visible.
 
 ## Overview
 This project aims to detect a user's posture using a webcam and alert them if they have bad posture (forward head posture) that could lead to neck pain or other discomfort.  
+
+**NOTE** : Face and shoulders should be visible.
+
 The application uses :
 - **Mediapipe** for pose detection.
 - **OpenCV** for face detection and visualizations.
@@ -29,12 +36,8 @@ The program captures webcam feed and continuously monitors the user's pose. It u
 - **Real-time Feedback**: Posture status (good or bad) is displayed on the screen, along with colored visual indicators.
 - **Customizable Sensitivity**: Users can adjust the sensitivity threshold and slouching duration through a Tkinter interface.
 - **Settings Persistence**: Sensitivity threshold and slouching duration are saved in a `posture_settings.json` file and persist across sessions.
-- **Taskbar Icon**: The application now has a custom taskbar icon for a more professional look.
 
 ## Limitations
-- **Sound Looping Issue**: 
-    - V1 : The sound alert does not loop correctly in its current version. The sound plays once when bad posture is detected, but doesn't restart or loop until the posture changes.
-    - V2 : replaced the audio file with a continuous beep that loops until the posture is corrected.
 - **Accuracy of Ear Estimation**: If the Mediapipe pose detection fails to detect ears, the program falls back to using the Haar Cascade face detection, which may not always give accurate ear positions, especially for side profiles.
 
 ## Requirements
