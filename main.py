@@ -84,12 +84,13 @@ class PostureMonitor:
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)  # Reduce frame height for faster processing
         cap.set(cv2.CAP_PROP_FPS, 15)  # Lower frame rate to 15 FPS
 
-        frame_skip = 1  # Skip frames to reduce CPU usage
+        frame_skip = 3  # Skip frames to reduce CPU usage
         frame_counter = 0
 
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
+                print("Error: Failed to read frame from webcam. Exiting...")
                 break
 
             # Skip processing for some frames to reduce cpu usage
@@ -165,13 +166,14 @@ class PostureMonitor:
         if self.sound_thread is not None and self.sound_thread.is_alive():
             self.sound_thread.join(timeout=2)
         cap.release()
+        print("Resources released. Exiting...")
         cv2.destroyAllWindows()
 
 class PostureApp:
     def __init__(self):
         self.monitor = PostureMonitor()  # Create an instance of PostureMonitor
 
-    def run_gui(self):
+    def run_tk_gui(self):
         posture_monitor_interface = tk.Tk()
         posture_monitor_interface.title("Posture Monitor Settings")
         posture_monitor_interface.geometry("350x220")
@@ -222,4 +224,4 @@ class PostureApp:
 
 if __name__ == "__main__":
     app = PostureApp()
-    app.run_gui()
+    app.run_tk_gui()
